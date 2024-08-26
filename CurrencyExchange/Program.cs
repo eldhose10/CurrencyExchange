@@ -29,7 +29,7 @@ class Program
             var result = converter.Convert(currencyPair, amount);
             Console.WriteLine(result);
         }
-        catch (ArgumentException ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
