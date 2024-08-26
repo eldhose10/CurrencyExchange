@@ -1,4 +1,5 @@
-﻿using CurrencyExchange;
+﻿
+using CurrencyExchange;
 using System.Globalization;
 
 class Program
@@ -24,9 +25,10 @@ class Program
         try
         {
             IExchangeRateService exchangeRateService = new ExchangeRateService();
-            ICurrencyConverter converter = new CurrencyConverter(exchangeRateService);
+            IAmountFormatter amountFormatter = new AmountFormatter();
+            ICurrencyConverter converter = new CurrencyConverter(exchangeRateService, amountFormatter);
             var result = converter.Convert(currencyPair, amount);
-            Console.WriteLine(result.ToString("0.0000"));
+            Console.WriteLine(result);
         }
         catch (ArgumentException ex)
         {

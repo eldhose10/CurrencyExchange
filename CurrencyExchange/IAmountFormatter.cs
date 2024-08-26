@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CurrencyExchange
 {
-    public interface ICurrencyConverter
+    public interface IAmountFormatter
     {
-        string Convert(string currencyPair, decimal amount); 
+        string Format(decimal amount);
     }
 }

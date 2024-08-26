@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,13 +10,15 @@ namespace CurrencyExchange
     public class CurrencyConverter : ICurrencyConverter
     {
         private readonly IExchangeRateService _exchangeRateService;
+        private readonly IAmountFormatter _amountFormatter;
 
-        public CurrencyConverter(IExchangeRateService exchangeRateService)
+        public CurrencyConverter(IExchangeRateService exchangeRateService, IAmountFormatter amountFormatter)
         {
             _exchangeRateService = exchangeRateService;
+            _amountFormatter = amountFormatter;
         }
 
-        public decimal Convert(string currencyPair, decimal amount)
+        public string Convert(string currencyPair, decimal amount)
         {
             try
             {
@@ -30,7 +33,7 @@ namespace CurrencyExchange
                 // Return the same amount if both currencies are the same
                 if (sourceCurrency == targetCurrency)
                 {
-                    return amount;
+                    return _amountFormatter.Format(amount);
                 }
 
                 decimal sourceCurrencyRate = _exchangeRateService.GetRate(sourceCurrency);
@@ -39,7 +42,7 @@ namespace CurrencyExchange
                 decimal amountInBaseCurrency = amount * sourceCurrencyRate;
                 decimal convertedAmount = amountInBaseCurrency / targetCurrencyRate;
 
-                return convertedAmount;
+                return _amountFormatter.Format(convertedAmount);
 
             }
             catch (Exception ex)

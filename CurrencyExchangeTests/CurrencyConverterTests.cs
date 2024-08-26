@@ -7,12 +7,14 @@ namespace CurrencyConverterTests
     public class CurrencyConverterTests
     {
         private readonly ICurrencyConverter _currencyConverter;
+        private readonly Mock<IAmountFormatter> _amountFormatterMock;
         private readonly Mock<IExchangeRateService> _exchangeRateServiceMock;
 
         public CurrencyConverterTests()
         {
             _exchangeRateServiceMock = new Mock<IExchangeRateService>();
-            _currencyConverter = new CurrencyConverter(_exchangeRateServiceMock.Object);
+            _amountFormatterMock = new Mock<IAmountFormatter>();
+            _currencyConverter = new CurrencyConverter(_exchangeRateServiceMock.Object, _amountFormatterMock.Object);
         }
 
         [Fact]
@@ -22,11 +24,14 @@ namespace CurrencyConverterTests
             var currencyPair = "USD/USD";
             var amount = 100m;
 
+            //Mock
+             _amountFormatterMock.Setup(x => x.Format(amount)).Returns("100,0000");
+
             // Act
-            var result = _currencyConverter.Convert(currencyPair, amount);
+            var result = _currencyConverter.Convert(currencyPair, amount); 
 
             // Assert
-            Assert.Equal(amount, result);
+            Assert.Equal("100,0000", result);
         }
 
         [Fact]
@@ -37,16 +42,16 @@ namespace CurrencyConverterTests
             var amount = 100m;
 
             // Mock
+            var expected = (amount * 7.2145m) / 6.3625m;
             _exchangeRateServiceMock.Setup(x => x.GetRate("EUR")).Returns(7.2145m);
             _exchangeRateServiceMock.Setup(x => x.GetRate("USD")).Returns(6.3625m);
+            _amountFormatterMock.Setup(x => x.Format(expected)).Returns("113,3909");
 
             // Act
-            var result = _currencyConverter.Convert(currencyPair, amount);
-             
-            var expected = (amount * 7.2145m) / 6.3625m;
+            var result = _currencyConverter.Convert(currencyPair, amount); 
 
             // Assert
-            Assert.Equal(expected, result, 4);
+            Assert.Equal("113,3909", result);
         }
     }
 }
