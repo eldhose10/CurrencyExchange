@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CurrencyExchange
+namespace CurrencyExchange.Services
 {
-    public interface IExchangeRateService
+    public interface IAmountFormatter
     {
-        decimal GetRate(string currency);
+        string Format(decimal amount);
     }
 }

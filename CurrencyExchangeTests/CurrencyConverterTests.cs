@@ -1,6 +1,6 @@
 ﻿using Xunit;
 using Moq;
-using CurrencyExchange;
+using CurrencyExchange.Services;
 
 namespace CurrencyConverterTests
 {

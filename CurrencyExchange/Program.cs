@@ -1,5 +1,4 @@
-﻿
-using CurrencyExchange;
+﻿using CurrencyExchange.Services;
 using System.Globalization;
 
 class Program
